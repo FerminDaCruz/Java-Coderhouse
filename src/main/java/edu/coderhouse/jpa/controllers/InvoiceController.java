@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/invoices")
@@ -33,6 +34,19 @@ public class InvoiceController {
     public ResponseEntity<List<Invoice>> getAllInvoice() {
         List<Invoice> invoices = invoiceService.getAllInvoice();
         return ResponseEntity.ok(invoices);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Invoice> updateInvoice(@PathVariable Integer id, @RequestBody Invoice invoice) {
+        Invoice updatedInvoice = invoiceService.updateInvoice(id, invoice);
+        return updatedInvoice != null ? ResponseEntity.ok(updatedInvoice) : ResponseEntity.notFound().build();
+    }
+
+    // PATCH - Actualización parcial de un Invoice
+    @PatchMapping("/{id}")
+    public ResponseEntity<Invoice> partialUpdateInvoice(@PathVariable Integer id, @RequestBody Map<String, Object> updates) {
+        Invoice updatedInvoice = invoiceService.partialUpdateInvoice(id, updates);
+        return updatedInvoice != null ? ResponseEntity.ok(updatedInvoice) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")

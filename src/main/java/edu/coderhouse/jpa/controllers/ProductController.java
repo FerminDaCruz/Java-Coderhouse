@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/products")
@@ -32,6 +33,19 @@ public class ProductController {
     public ResponseEntity<List<Product>> getAllProducts() {
         List<Product> products = productService.getAllProducts();
         return ResponseEntity.ok(products);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Product> updateProduct(@PathVariable Integer id, @RequestBody Product product) {
+        Product updatedProduct = productService.updateProduct(id, product);
+        return updatedProduct != null ? ResponseEntity.ok(updatedProduct) : ResponseEntity.notFound().build();
+    }
+
+    // PATCH - Actualización parcial de un Product
+    @PatchMapping("/{id}")
+    public ResponseEntity<Product> partialUpdateProduct(@PathVariable Integer id, @RequestBody Map<String, Object> updates) {
+        Product updatedProduct = productService.partialUpdateProduct(id, updates);
+        return updatedProduct != null ? ResponseEntity.ok(updatedProduct) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
