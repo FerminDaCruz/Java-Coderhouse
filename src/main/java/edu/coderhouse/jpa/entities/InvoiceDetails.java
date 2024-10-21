@@ -13,13 +13,13 @@ import lombok.*;
 @NoArgsConstructor
 public class InvoiceDetails {
 
-    @ManyToOne
-    @JoinColumn(name = "invoice_id", nullable = false)
-    private Invoice invoice;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer invoice_detail_id;
+
+    @ManyToOne
+    @JoinColumn(name = "invoice_id", nullable = false)
+    private Invoice invoice;
 
     @Column(nullable = false)
     private Integer amount;

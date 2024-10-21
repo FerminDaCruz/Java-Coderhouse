@@ -3,12 +3,15 @@ package edu.coderhouse.jpa.services.impl;
 import edu.coderhouse.jpa.entities.Invoice;
 import edu.coderhouse.jpa.repositories.InvoiceRepository;
 import edu.coderhouse.jpa.services.InvoiceService;
+import edu.coderhouse.jpa.services.TimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -18,8 +21,15 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Autowired
     private InvoiceRepository invoiceRepository;
 
+    @Autowired
+    private TimeService timeService;
+
     @Override
     public Invoice saveInvoice(Invoice invoice) {
+        LocalDateTime currentDateTime = timeService.getCurrentDateTime();
+
+        invoice.setCreated_at(currentDateTime);
+
         return invoiceRepository.save(invoice);
     }
 
