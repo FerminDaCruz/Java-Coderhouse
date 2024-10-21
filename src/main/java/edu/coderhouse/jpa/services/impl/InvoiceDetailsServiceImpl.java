@@ -1,7 +1,9 @@
 package edu.coderhouse.jpa.services.impl;
 
 import edu.coderhouse.jpa.entities.InvoiceDetails;
+import edu.coderhouse.jpa.entities.Product;
 import edu.coderhouse.jpa.repositories.InvoiceDetailsRepository;
+import edu.coderhouse.jpa.repositories.ProductRepository;
 import edu.coderhouse.jpa.services.InvoiceDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +20,19 @@ public class InvoiceDetailsServiceImpl implements InvoiceDetailsService {
     @Autowired
     private InvoiceDetailsRepository invoiceDetailsRepository;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     @Override
     public InvoiceDetails saveInvoiceDetails(InvoiceDetails invoiceDetails) {
+        Product product = invoiceDetails.getProduct();
+
+        if (product.getStock() < invoiceDetails.getAmount()) {
+            throw new IllegalArgumentException("No hay suficiente stock del producto" + product.getDescription());
+        }
+        product.setStock(product.getStock() - invoiceDetails.getAmount());
+        productRepository.save(product);
+
         return invoiceDetailsRepository.save(invoiceDetails);
     }
 

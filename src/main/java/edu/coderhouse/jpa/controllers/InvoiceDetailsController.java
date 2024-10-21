@@ -18,9 +18,13 @@ public class InvoiceDetailsController {
     private InvoiceDetailsService invoiceDetailsService;
 
     @PostMapping
-    public ResponseEntity<InvoiceDetails> createInvoiceDetails(@RequestBody InvoiceDetails invoiceDetails) {
-        InvoiceDetails newInvoiceDetails = invoiceDetailsService.saveInvoiceDetails(invoiceDetails);
-        return new ResponseEntity<>(newInvoiceDetails, HttpStatus.CREATED);
+    public ResponseEntity<?> createInvoiceDetails(@RequestBody InvoiceDetails invoiceDetails) {
+        try {
+            InvoiceDetails newInvoiceDetails = invoiceDetailsService.saveInvoiceDetails(invoiceDetails);
+            return new ResponseEntity<>(newInvoiceDetails, HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/{id}")
